@@ -17,7 +17,13 @@ body {
     color: white;
     width: 40rem;
     height: 8rem;
-       
+    text-align: right;
+    padding-top: 60px;    
+}
+.calculations {
+    margin-top: 10px;
+    padding-right: 30px;
+    font-size: 48px;
 }
 .util {
     display: flex;
