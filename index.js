@@ -9,6 +9,12 @@ let decimalUsed = false;
 const screen = document.querySelector(".digits");
 const buttons = document.querySelectorAll('button');
 
+// Add keydown event listener to page
+const allButtons = Array.from(document.querySelectorAll('button'));
+window.addEventListener('keydown',function(e){
+    keyboardHandler(e);
+});
+
 // Add event listeners to the keypad buttons
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -42,6 +48,22 @@ function evaluateInput(keyid){
         numberInput(keyid);
     }
     printText(displayVariable)
+}
+
+// Function to handle keydown entries
+function keyboardHandler(e) {
+    if(isFinite(e.key) || e.key == "." || e.key == "+" || e.key == "-"|| e.key == "=" || e.key == "*" || e.key == "/"){
+        evaluateInput(e.key);
+    }
+    if(e.key == "Backspace"|| e.key == "Delete"){
+        evaluateInput("back");
+    }
+    if(e.key == "Enter"){
+        evaluateInput("=");
+    }
+    if(e.key == "Escape"){
+        evaluateInput("clear");
+    }
 }
 
 
