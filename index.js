@@ -1,3 +1,4 @@
+// Initalize variables
 let firstOperand = null;
 let operator;
 let secondOperand = null;
@@ -5,17 +6,17 @@ let numCount = false;
 let displayVariable = "";
 let operandVariable = "";
 let decimalUsed = false;
-
 const screen = document.querySelector(".digits");
-
-
 const buttons = document.querySelectorAll('button');
+
+// Add event listeners to the keypad buttons
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
         evaluateInput(button.id);
     })
 })
 
+// Main function to process button clicks
 function evaluateInput(keyid){
     if (keyid == "clear") {
         allClear();
@@ -44,12 +45,7 @@ function evaluateInput(keyid){
 }
 
 
-function newCalcSeq(key){
-    firstOperand = displayVariable;
-    operator = key;
-    numCount = true;
-}
-
+// Calculate using two operands and an operator
 function calculate() {
     if(checkForZeroDivision()){
         displayVariable = "ERROR";
@@ -63,19 +59,30 @@ function calculate() {
     }
 }
 
+// Variable initialization when a first operand hasn't been set
+function newCalcSeq(key){
+    firstOperand = displayVariable;
+    operator = key;
+    numCount = true;
+}
+
+// Disable the delete/backspace button
 function disableDel(){
     document.getElementById("back").disabled = true;
 }
+// Enable the delete/backspace button
 function enableDel(){
     document.getElementById("back").disabled = false;
 }
 
+// Check to see if user is dividing by zero
 function checkForZeroDivision(){
     if(displayVariable == 0 && operator == "/"){
         return true;
     }
 }
 
+// Update displayVariable with user input of numbers or decimal
 function numberInput(key) {
     enableDel();
     if (numCount == true) {
@@ -86,18 +93,19 @@ function numberInput(key) {
     displayVariable += key;
 }
 
+// Delete/Backspace function
 function removeDigit(){
-    console.log("The displayVariable is :" + displayVariable + " with a length of " + displayVariable.length);
     if (displayVariable.length > 0){
         displayVariable = displayVariable.slice(0,-1);
-        console.log("dispVar is :" + displayVariable);
     }
 }
 
+// Print input to screen
 function printText(disp){
     return screen.innerText = disp;
 }
 
+// Clear (AC) function
 function allClear() {
     displayVariable = "";
     firstOperand = null;
@@ -107,10 +115,12 @@ function allClear() {
     enableDel();
 }
 
+// Round to three decimals
 function roundCalc(num) {
-    return Math.round(num *1000) / 1000;
+    return Math.round(num *100000) / 100000;
 }
 
+// Hub to direct data into correct math function
 function operate(num1, oper, num2) {
     if (oper == "*") {
         return multiply(num1, num2);
@@ -126,6 +136,8 @@ function operate(num1, oper, num2) {
     }
 }
 
+
+// MATH FUNCTIONS
 
 function multiply(num1, num2) {
     return num1 * num2;
