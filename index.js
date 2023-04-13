@@ -1,41 +1,115 @@
-let firstOperand;
+let firstOperand = null;
 let operator;
-let secondOperand;
+let secondOperand = null;
 let numCount = false;
-
-const screen = document.querySelector(".digits");
 let displayVariable = "";
 let operandVariable = "";
+let decimalUsed = false;
+
+const screen = document.querySelector(".digits");
+
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        if (button.id == "clear") {
-            displayVariable = "";
-            numCount == false;
-        } else if (button.id == "/" || button.id == "*" || button.id == "-" || button.id == "+") {
-            operator = button.id;
-            firstOperand = displayVariable;
-            numCount = true;
-        } else if (button.id == "=") {
-            secondOperand = displayVariable;
-            let calc = operate(firstOperand, operator, secondOperand)
-            calc = Math.round(calc * 1000) / 1000;
-            displayVariable = calc;
-            numCount == false;
-        } else {
-            if (numCount == true) {
-                displayVariable = "";
-                numCount = false;
-                console.log(numCount + button.id);
-            }
-            console.log(numCount + button.id);
-            displayVariable += button.id;
-        }
-        screen.innerText = displayVariable;
+        evaluateInput(button.id);
     })
 })
 
+function evaluateInput(keyid){
+    if (keyid == "clear") {
+        allClear();
+    } else if (keyid == "/" || keyid == "*" || keyid == "-" || keyid == "+") {
+        if(firstOperand == null) {
+            newCalcSeq(keyid);
+        } else {          
+            calculate();
+            firstOperand = displayVariable;
+            operator = keyid;
+        }                            
+    } else if (keyid == "=") {
+        calculate();
+        firstOperand = null;
+    } else if(keyid == "."){
+        if(!decimalUsed){
+            numberInput(keyid);
+            decimalUsed = true;
+        }
+    } else if(keyid == "back"){
+        removeDigit();
+    } else {
+        numberInput(keyid);
+    }
+    printText(displayVariable)
+}
+
+
+function newCalcSeq(key){
+    firstOperand = displayVariable;
+    operator = key;
+    numCount = true;
+}
+
+function calculate() {
+    if(checkForZeroDivision()){
+        displayVariable = "ERROR";
+    } else {
+    let calc = operate(firstOperand, operator, displayVariable)
+    calc = roundCalc(calc);
+    displayVariable = calc;
+    numCount = true;
+    decimalUsed = false;
+    disableDel();
+    }
+}
+
+function disableDel(){
+    document.getElementById("back").disabled = true;
+}
+function enableDel(){
+    document.getElementById("back").disabled = false;
+}
+
+function checkForZeroDivision(){
+    if(displayVariable == 0 && operator == "/"){
+        return true;
+    }
+}
+
+function numberInput(key) {
+    enableDel();
+    if (numCount == true) {
+        displayVariable = "";
+        numCount = false;
+        console.log(numCount + key);
+    }
+    displayVariable += key;
+}
+
+function removeDigit(){
+    console.log("The displayVariable is :" + displayVariable + " with a length of " + displayVariable.length);
+    if (displayVariable.length > 0){
+        displayVariable = displayVariable.slice(0,-1);
+        console.log("dispVar is :" + displayVariable);
+    }
+}
+
+function printText(disp){
+    return screen.innerText = disp;
+}
+
+function allClear() {
+    displayVariable = "";
+    firstOperand = null;
+    secondOperand = null;
+    numCount == false;
+    decimalUsed = false;
+    enableDel();
+}
+
+function roundCalc(num) {
+    return Math.round(num *1000) / 1000;
+}
 
 function operate(num1, oper, num2) {
     if (oper == "*") {
