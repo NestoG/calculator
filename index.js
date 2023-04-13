@@ -3,7 +3,7 @@ let operator;
 let secondOperand;
 let numCount = false;
 
-const screen = document.querySelector(".calculations");
+const screen = document.querySelector(".digits");
 let displayVariable = "";
 let operandVariable = "";
 
@@ -20,6 +20,7 @@ buttons.forEach((button) => {
         } else if (button.id == "=") {
             secondOperand = displayVariable;
             let calc = operate(firstOperand, operator, secondOperand)
+            calc = Math.round(calc * 1000) / 1000;
             displayVariable = calc;
             numCount == false;
         } else {
